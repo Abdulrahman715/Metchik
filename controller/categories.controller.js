@@ -3,8 +3,11 @@ const Category = require('../models/categories.model');
 const { validationResult } = require("express-validator");
 
 const httpStatusText = require('../utils/httpStatusText');
+const asyncWrapper = require('../middleware/asyncWrapper');
+const appError = require('../utils/appError');
 
-const getAllCategories = async (req, res) => {
+const getAllCategories = asyncWrapper(
+    async (req, res) => {
     
     const query = req.query;
     const limit = query.limit || 10;
@@ -18,18 +21,16 @@ const getAllCategories = async (req, res) => {
             categories
         }
     });
-};
+}
 
-const getSingleCategory = async(req, res) => {
+)
+const getSingleCategory = asyncWrapper(async(req, res,next) => {
     
     const category = await Category.findById(req.params.categoryId);
 
     if (!category) {
-        return res.status(404).json({
-            status: httpStatusText.FAIL,
-            data: null,
-            message: "this category not found",
-    });
+        const error = appError.create("this category not found", 404, httpStatusText.FAIL);
+        return next(error);
     }
 
     res.status(200).json({
@@ -38,16 +39,14 @@ const getSingleCategory = async(req, res) => {
             category
         }
     });
-};
+});
 
-const createCategory = async(req, res) => {
+const createCategory = asyncWrapper(async(req, res,next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({
-            status: httpStatusText.FAIL,
-            data: null,
-            message: errors.array(),
-    });
+
+        const error = appError.create(errors.array(), 400, httpStatusText.FAIL);
+        return next(error);
     }
 
     const newCategory = new Category(req.body);
@@ -59,19 +58,16 @@ const createCategory = async(req, res) => {
             newCategory
         }
     });
-};
+});
 
-const updateCategory = async(req, res) => {
+const updateCategory = asyncWrapper(async(req, res) => {
     const categoryId = req.params.categoryId;
 
     let updatedCategory = await Category.findByIdAndUpdate(categoryId, { $set: { ...req.body } });
 
     if (!updatedCategory) {
-        return res.status(404).json({
-            status: httpStatusText.FAIL,
-            data: null,
-            message: "this category not found to update",
-    });
+        const error = appError.create("this category not found to update", 404, httpStatusText.FAIL);
+        return next(error);
     }
 
     res.status(200).json({
@@ -80,9 +76,9 @@ const updateCategory = async(req, res) => {
             updatedCategory
         }
     });
-};
+});
 
-const deleteCategory = async(req, res) => {
+const deleteCategory = asyncWrapper(async(req, res) => {
     await Category.deleteOne({ _id: req.params.categoryId });
 
     res.status(200).json({
@@ -90,7 +86,7 @@ const deleteCategory = async(req, res) => {
         data: null,
         message: "category is deleted successfully"
     });
-};
+});
 
 module.exports = {
     getAllCategories,
