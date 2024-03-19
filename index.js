@@ -17,9 +17,11 @@ mongoose.connect(url).then(() => {
 
 const categoriesRouter = require('./Router/categories.router');
 const subCategoriesRouter = require('./Router/subcategories.router');
+const productRouter = require("./Router/products.router");
 
 app.use('/api/categories', categoriesRouter);
 app.use("/api/subCategories", subCategoriesRouter);
+app.use("/api/products", productRouter);
 
 app.all('*', (req, res, next) => {
     res.status(500).json({
@@ -33,7 +35,7 @@ app.use((error, req, res, next) => {
     res.status(error.statusCode || 500).json({
         status: error.statusText || httpStatusText.ERROR,
         data: null,
-        message: error.message,
+        message: error.message || "some thing wrong",
     });
 })
 
