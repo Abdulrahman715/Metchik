@@ -5,6 +5,7 @@ const router = express.Router();
 const userController = require("../controller/users.controller");
 const verifyToken = require('../middleware/verifyToken');
 const multer = require('multer');
+const appError = require('../utils/appError');
 
 const diskStorage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -18,7 +19,20 @@ const diskStorage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: diskStorage });
+const fileFilter = (req, file, cb) => {
+    const imageType = file.mimetype.split('/')[0];
+
+    if (imageType === "image") {
+        return cb(null, true);
+    } else {
+        return cb(appError.create("the file must be an image", 400), false);
+    }
+}
+
+const upload = multer({
+    storage: diskStorage,
+    fileFilter
+});
 
 
 router.route('/')
