@@ -5,9 +5,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const httpStatusText = require('./utils/httpStatusText');
 
+const path = require('path');
+
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const url = process.env.MONGO_URL;
 
