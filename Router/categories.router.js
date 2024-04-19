@@ -3,12 +3,11 @@ const express = require('express');
 const router = express.Router();
 
 const categoriesController = require("../controller/categories.controller");
-const { validationSchema } = require('../middleware/validation');
-
+const upload = require("../middleware/multerConfig");
 
 router.route('/')
     .get(categoriesController.getAllCategories)
-    .post(validationSchema(), categoriesController.createCategory);
+    .post(upload.single('avatar'), categoriesController.createCategory);
 
 router.route('/:categoryId')
     .get(categoriesController.getSingleCategory)

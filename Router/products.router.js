@@ -3,15 +3,14 @@ const express = require('express');
 const router = express.Router();
 
 const productController = require("../controller/products.controller");
-const { validationSchema } = require('../middleware/validation');
 const verifyToken = require('../middleware/verifyToken');
 const userRoles = require('../utils/userRoles');
 const allowedTo = require('../middleware/allowedTo');
-
+const upload = require('../middleware/multerConfig');
 
 router.route('/')
     .get(productController.getAllProducts)
-    .post(validationSchema(), productController.createProduct);
+    .post(upload.single('avatar'), productController.createProduct);
 
 router.route('/:productId')
     .get(productController.getSingleProduct)

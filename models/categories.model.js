@@ -7,9 +7,9 @@ const categorySchema = new mongoose.Schema({
         trim: true,
         required: true
     },
-    image: {
+    avatar: {
         type: String,
-        required: true
+        default:'uploads/profile.png'
     }
 });
 

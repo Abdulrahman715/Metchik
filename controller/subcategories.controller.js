@@ -41,7 +41,10 @@ const getSingleSubCategory = asyncWrapper(async(req, res,next) => {
     });
 });
 
-const createSubCategory = asyncWrapper(async(req, res,next) => {
+const createSubCategory = asyncWrapper(async (req, res, next) => {
+    
+    const { title , category } = req.body;
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
 
@@ -49,7 +52,11 @@ const createSubCategory = asyncWrapper(async(req, res,next) => {
         return next(error);
     }
 
-    const newSubCategory = new SubCategory(req.body);
+    const newSubCategory = new SubCategory({
+        title,
+        category,
+        avatar: req.file.filename
+    });
     await newSubCategory.save();
 
     res.status(201).json({

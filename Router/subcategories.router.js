@@ -3,12 +3,11 @@ const express = require('express');
 const router = express.Router();
 
 const subCategoriesController = require("../controller/subcategories.controller");
-const { validationSchema } = require('../middleware/validation');
-
+const upload = require("../middleware/multerConfig");
 
 router.route('/')
     .get(subCategoriesController.getAllSubCategories)
-    .post(validationSchema(), subCategoriesController.createSubCategory);
+    .post(upload.single('avatar'), subCategoriesController.createSubCategory);
 
 router.route('/:SubCategoryId')
     .get(subCategoriesController.getSingleSubCategory)

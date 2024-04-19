@@ -42,14 +42,25 @@ const getSingleProduct = asyncWrapper(async(req, res,next) => {
 });
 
 const createProduct = asyncWrapper(async(req, res,next) => {
+    
+    const { title, shortDescription, price, category, subcategory } = req.body;
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
 
         const error = appError.create(errors.array(), 400, httpStatusText.FAIL);
         return next(error);
+
     }
 
-    const newProduct = new Product(req.body);
+    const newProduct = new Product({
+        title,
+        shortDescription,
+        price,
+        category,
+        subcategory,
+        avatar: req.file.filename
+    });
     await newProduct.save();
 
     res.status(201).json({
