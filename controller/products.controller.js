@@ -21,9 +21,9 @@ const getAllProducts = asyncWrapper(
             products
         }
     });
-    })
+}
 
-
+)
 const getSingleProduct = asyncWrapper(async(req, res,next) => {
     
     const product = await Product.findById(req.params.productId);
@@ -41,16 +41,15 @@ const getSingleProduct = asyncWrapper(async(req, res,next) => {
     });
 });
 
-const createProduct = asyncWrapper(async(req, res,next) => {
+const createProduct = asyncWrapper(async (req, res, next) => {
     
     const { title, shortDescription, price, category, subCategory } = req.body;
-    
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
 
         const error = appError.create(errors.array(), 400, httpStatusText.FAIL);
         return next(error);
-
     }
 
     const url = `https://github.com/Abdulrahman715/Metchik/blob/main/uploads/${req.file.filename}?raw=true`;
@@ -62,7 +61,7 @@ const createProduct = asyncWrapper(async(req, res,next) => {
         price,
         category,
         subCategory,
-        avatar: url
+        avatar: url,
     });
     await newProduct.save();
 
