@@ -51,12 +51,15 @@ const createCategory = asyncWrapper(async(req, res,next) => {
         return next(error);
     }
 
+    const url = `https://github.com/Abdulrahman715/Metchik/blob/main/uploads/${req.file.filename}?raw=true`;
+
     const newCategory = new Category({
         title,
-        avatar:req.file.filename
+        avatar:url
     });
 
     await newCategory.save();
+
 
     res.status(201).json({
         status: httpStatusText.SUCCESS,
