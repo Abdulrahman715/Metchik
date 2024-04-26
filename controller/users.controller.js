@@ -56,13 +56,15 @@ const register = asyncWrapper(async(req, res,next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const url = `https://github.com/Abdulrahman715/Metchik/blob/main/uploads/${req.file.filename}?raw=true`;
+
     const newUser = new User({
         firstName,
         lastName,
         email,
         password: hashedPassword,
         role,
-        avatar:req.file.filename
+        avatar: url
     });
 
     //generate jwt 

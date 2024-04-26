@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const productsSchema = new mongoose.Schema({
     title: {
         type: String,
-        trim: true,
         required: true
     },
     avatar: {
@@ -13,8 +12,6 @@ const productsSchema = new mongoose.Schema({
     shortDescription: {
         type: String,
         required: true,
-        minlength: [5, "too short description"],
-        maxlength: [50, "too short description"],
     },
     price: {
         type: Number,
@@ -24,7 +21,7 @@ const productsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    subcategory: {
+    subCategory: {
         type: String,
         required: true,
     }

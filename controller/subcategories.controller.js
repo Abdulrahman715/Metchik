@@ -52,10 +52,12 @@ const createSubCategory = asyncWrapper(async (req, res, next) => {
         return next(error);
     }
 
+    const url = `https://github.com/Abdulrahman715/Metchik/blob/main/uploads/${req.file.filename}?raw=true`;
+
     const newSubCategory = new SubCategory({
         title,
         category,
-        avatar: req.file.filename
+        avatar: url
     });
     await newSubCategory.save();
 

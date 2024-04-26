@@ -1,4 +1,4 @@
-const ProductContain = require('../models/productContain');
+const ProductContain = require('../models/productContain.model');
 
 const { validationResult } = require("express-validator");
 
@@ -34,7 +34,7 @@ const createProductContain = asyncWrapper(async(req, res,next) => {
         const error = appError.create(errors.array(), 400, httpStatusText.FAIL);
         return next(error);
 
-    }
+    };
 
     const newProductContain = new ProductContain({
         _id,

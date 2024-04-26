@@ -21,9 +21,9 @@ const getAllProducts = asyncWrapper(
             products
         }
     });
-}
+    })
 
-)
+
 const getSingleProduct = asyncWrapper(async(req, res,next) => {
     
     const product = await Product.findById(req.params.productId);
@@ -43,7 +43,7 @@ const getSingleProduct = asyncWrapper(async(req, res,next) => {
 
 const createProduct = asyncWrapper(async(req, res,next) => {
     
-    const { title, shortDescription, price, category, subcategory } = req.body;
+    const { title, shortDescription, price, category, subCategory } = req.body;
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -53,13 +53,16 @@ const createProduct = asyncWrapper(async(req, res,next) => {
 
     }
 
+    const url = `https://github.com/Abdulrahman715/Metchik/blob/main/uploads/${req.file.filename}?raw=true`;
+
+
     const newProduct = new Product({
         title,
         shortDescription,
         price,
         category,
-        subcategory,
-        avatar: req.file.filename
+        subCategory,
+        avatar: url
     });
     await newProduct.save();
 

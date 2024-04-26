@@ -12,8 +12,7 @@ const subCategorySchema = new mongoose.Schema({
         default:'uploads/profile.png'
     },
     category: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Category',
+        type: String,
         required: [true, 'sub Category must be belong to parent category'],
     }
 });
