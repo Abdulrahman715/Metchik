@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const productsSchema = new mongoose.Schema({
     title: {
         type: String,
-        unique: [true, 'product must be unique'],
         trim: true,
         required: true
     },
@@ -22,14 +21,12 @@ const productsSchema = new mongoose.Schema({
         required: true
     },
     category: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Category',
-        required: [true, 'product must be belong to parent category'],
+        type: String,
+        required: true,
     },
     subcategory: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'SubCategory',
-        required: [true, 'product must be belong to SubCategory'],
+        type: String,
+        required: true,
     }
 });
 
