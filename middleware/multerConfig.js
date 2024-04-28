@@ -2,12 +2,11 @@ const multer = require('multer');
 
 const diskStorage = multer.diskStorage({
     destination: function (req, file, cb) {
-        // console.log('filename ..... ', file);
         cb(null, 'uploads');
     },
     filename: function (req, file, cb) {
         const extension = file.mimetype.split('/')[1];
-        const fileName = `Category-${Date.now()}.${extension}`;
+        const fileName = `image-${Date.now()}.${extension}`;
         cb(null, fileName);
     }
 });

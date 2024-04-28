@@ -24,12 +24,14 @@ const subCategoriesRouter = require('./Router/subcategories.router');
 const productRouter = require("./Router/products.router");
 const userRouter = require('./Router/users.router');
 const ProductContain = require('./Router/productContain.router');
+const uploadImage = require('./Router/UploadImage.router');
 
 app.use('/api/categories', categoriesRouter);
 app.use("/api/subCategories", subCategoriesRouter);
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 app.use("/api/ProductContain", ProductContain);
+app.use('/api/uploadImage', uploadImage);
 
 app.all('*', (req, res, next) => {
     res.status(500).json({
