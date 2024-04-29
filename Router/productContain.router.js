@@ -6,6 +6,7 @@ const productContain = require("../controller/productContainController");
 
 
 router.route('/')
+    .get(productContain.getAllProductDetails)
     .post(productContain.createProductContain);
 
 router.route('/:productId')

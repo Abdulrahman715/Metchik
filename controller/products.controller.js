@@ -21,9 +21,8 @@ const getAllProducts = asyncWrapper(
             products
         }
     });
-}
+    })
 
-)
 const getSingleProduct = asyncWrapper(async(req, res,next) => {
     
     const product = await Product.findById(req.params.productId);

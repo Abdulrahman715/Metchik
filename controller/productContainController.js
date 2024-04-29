@@ -6,6 +6,21 @@ const httpStatusText = require('../utils/httpStatusText');
 const asyncWrapper = require('../middleware/asyncWrapper');
 const appError = require('../utils/appError');
 
+const getAllProductDetails = asyncWrapper(
+    async (req, res) => {
+    
+        const query = req.query;
+        const productId = query.productId;
+
+        const productDetails = await ProductContain.find({ _id: productId });
+        
+        res.status(200).json({
+            status: httpStatusText.SUCCESS,
+            data: {
+                productDetails
+            }
+        });
+});
 
 const getSingleProductContain = asyncWrapper(async(req, res,next) => {
     
@@ -83,6 +98,7 @@ const deleteProductContain = asyncWrapper(async(req, res) => {
 });
 
 module.exports = {
+    getAllProductDetails,
     getSingleProductContain,
     createProductContain,
     updateProductContain,
