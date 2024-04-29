@@ -42,7 +42,7 @@ const getSingleCategory = asyncWrapper(async(req, res,next) => {
 });
 
 const createCategory = asyncWrapper(async(req, res,next) => {
-    const { title } = req.body;
+    const { title, imageUrl } = req.body;
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -55,7 +55,8 @@ const createCategory = asyncWrapper(async(req, res,next) => {
 
     const newCategory = new Category({
         title,
-        avatar:url
+        avatar: url,
+        imageUrl
     });
 
     await newCategory.save();

@@ -46,7 +46,7 @@ const getSingleUser = asyncWrapper(async(req, res,next) => {
 
 const register = asyncWrapper(async(req, res,next) => {
     
-    const { firstName, lastName, email, password , role } = req.body;
+    const { firstName, lastName, email, password, role, imageUrl } = req.body;
 
     const oldUser = await User.findOne({ firstName: firstName, email: email });
     if (oldUser) {
@@ -64,7 +64,8 @@ const register = asyncWrapper(async(req, res,next) => {
         email,
         password: hashedPassword,
         role,
-        avatar: url
+        avatar: url,
+        imageUrl
     });
 
     //generate jwt 

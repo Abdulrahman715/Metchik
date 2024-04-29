@@ -14,7 +14,7 @@ const ProductSchema = new mongoose.Schema({
         ref: 'Product',
         required: true
     },
-    images: [String],
+    imageUrl: [String],
     rating: Number,
     review: Number,
     productAttribute: [ProductAttributeSchema], // Embedded schema

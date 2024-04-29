@@ -3,8 +3,6 @@ const mongoose = require('mongoose');
 const subCategorySchema = new mongoose.Schema({
     title: {
         type: String,
-        unique: [true, 'sub Category must be unique'],
-        trim: true,
         required: true
     },
     avatar: {
@@ -14,6 +12,9 @@ const subCategorySchema = new mongoose.Schema({
     category: {
         type: String,
         required: [true, 'sub Category must be belong to parent category'],
+    },
+    imageUrl: {
+        type: String
     }
 });
 

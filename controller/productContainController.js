@@ -26,7 +26,7 @@ const getSingleProductContain = asyncWrapper(async(req, res,next) => {
 
 const createProductContain = asyncWrapper(async(req, res,next) => {
     
-    const { _id, rating, review, description, productAttribute } = req.body;
+    const { _id, rating, review, description, productAttribute, imageUrl } = req.body;
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -42,6 +42,7 @@ const createProductContain = asyncWrapper(async(req, res,next) => {
         rating,
         review,
         productAttribute,
+        imageUrl
     });
     await newProductContain.save();
 

@@ -21,6 +21,13 @@ const productsSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    imageUrl: {
+        type: String,
+    },
+    discountPrecentage: {
+        type: Number,
+        default: 10 ,
+    },
     category: {
         type: String,
         required: "true",
@@ -28,7 +35,7 @@ const productsSchema = new mongoose.Schema({
     subCategory: {
         type: String,
         required: "true",
-    },
+    }
 });
 
 module.exports = mongoose.model("Product", productsSchema);

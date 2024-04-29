@@ -43,7 +43,7 @@ const getSingleProduct = asyncWrapper(async(req, res,next) => {
 
 const createProduct = asyncWrapper(async (req, res, next) => {
     
-    const { title, shortDescription, price, category, subCategory } = req.body;
+    const { title, shortDescription, price, category, subCategory ,imageUrl,discountPrecentage} = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -62,6 +62,8 @@ const createProduct = asyncWrapper(async (req, res, next) => {
         category,
         subCategory,
         avatar: url,
+        imageUrl,
+        discountPrecentage
     });
     await newProduct.save();
 

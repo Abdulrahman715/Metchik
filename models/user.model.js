@@ -50,6 +50,9 @@ const userSchema = new mongoose.Schema({
     avatar: {
         type: String,
         default: "uploads/profile.png"
+    },
+    imageUrl: {
+        type: String,
     }
 });
 

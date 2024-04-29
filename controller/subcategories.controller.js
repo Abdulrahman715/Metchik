@@ -43,7 +43,7 @@ const getSingleSubCategory = asyncWrapper(async(req, res,next) => {
 
 const createSubCategory = asyncWrapper(async (req, res, next) => {
     
-    const { title , category } = req.body;
+    const { title, category, imageUrl } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -57,7 +57,8 @@ const createSubCategory = asyncWrapper(async (req, res, next) => {
     const newSubCategory = new SubCategory({
         title,
         category,
-        avatar: url
+        avatar: url,
+        imageUrl
     });
     await newSubCategory.save();
 
