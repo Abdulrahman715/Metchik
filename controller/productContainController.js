@@ -12,12 +12,12 @@ const getAllProductDetails = asyncWrapper(
         const query = req.query;
         const productId = query.productId;
 
-        const productDetails = await ProductContain.find({ _id: productId });
+        const productContain = await ProductContain.find({ _id: productId });
         
         res.status(200).json({
             status: httpStatusText.SUCCESS,
             data: {
-                productDetails
+                productContain
             }
         });
 });
