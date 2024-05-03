@@ -104,7 +104,7 @@ const login = asyncWrapper(async (req, res,next) => {
             status: httpStatusText.SUCCESS,
             message: "login is successfully",
             data: {
-                token
+                user
             }
         });
     } else {
