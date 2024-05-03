@@ -3,12 +3,11 @@ const express = require('express');
 const router = express.Router();
 
 const userController = require("../controller/users.controller");
-const verifyToken = require('../middleware/verifyToken');
 const upload = require('../middleware/multerConfig');
 
 
 router.route('/')
-    .get(verifyToken, userController.getAllUsers)
+    .get(userController.getAllUsers)
     .post(upload.single('avatar'), userController.register)
 
 router.route('/login')

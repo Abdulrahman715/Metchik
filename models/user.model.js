@@ -3,19 +3,14 @@ const validator = require('validator');
 const userRoles = require('../utils/userRoles');
 
 const userSchema = new mongoose.Schema({
-    firstName: {
-        type: String,
-        required: true
-    },
-    lastName: {
-        type: String,
-        required: true
+    userName: {
+        type:String
     },
     email: {
         type: String,
         required: [true, "please enter your email"],
         uniqe: true,
-        validate: [validator.isEmail, "this field must be email address"],
+        validate: [validator.isEmail, "this field must be email address"],   
     },
     password: {
         type: String,
@@ -29,6 +24,13 @@ const userSchema = new mongoose.Schema({
                     return /[A-Z]/.test(value);
                 },
                 message: props => `${props.value} does not contain an uppercase letter`
+            },
+            {
+                validator: function(value) {
+                    // Use a regular expression to check if the password contains at least one lowercase letter
+                    return /[a-z]/.test(value);
+                },
+                message: props => `${props.value} does not contain an lowercase letter`
             },
             {
                 validator: function(value) {
@@ -53,6 +55,7 @@ const userSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
+        default: "https://res.cloudinary.com/duwfy7ale/image/upload/v1714772509/gbktjsj2ynk4j1xxtk8x.jpg"
     }
 });
 

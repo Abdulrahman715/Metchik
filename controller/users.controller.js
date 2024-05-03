@@ -46,9 +46,9 @@ const getSingleUser = asyncWrapper(async(req, res,next) => {
 
 const register = asyncWrapper(async(req, res,next) => {
     
-    const { firstName, lastName, email, password, role, imageUrl } = req.body;
+    const { userName, email, password, role, imageUrl } = req.body;
 
-    const oldUser = await User.findOne({ firstName: firstName, email: email });
+    const oldUser = await User.findOne({ userName: userName, email: email });
     if (oldUser) {
         const error = appError.create("this User is already exist", 400, httpStatusText.FAIL);
         return next(error);
@@ -59,8 +59,7 @@ const register = asyncWrapper(async(req, res,next) => {
     const url = `https://github.com/Abdulrahman715/Metchik/blob/main/uploads/${req.file.filename}?raw=true`;
 
     const newUser = new User({
-        firstName,
-        lastName,
+        userName,
         email,
         password: hashedPassword,
         role,
