@@ -4,9 +4,9 @@ const router = express.Router();
 const favoriteController = require('../controller/favorite.controller');
 
 
-router.post("/add", favoriteController.addToFavorites);
+router.get("/add", favoriteController.addToFavorites);
 
-router.delete("/remove/:productId", favoriteController.removeFromFavorites);
+router.delete("/remove", favoriteController.removeFromFavorites);
 
 router.get("/list", favoriteController.getFavorites);
 

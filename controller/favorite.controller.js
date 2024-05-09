@@ -35,8 +35,9 @@ exports.addToFavorites = asyncWrapper(async (req, res, next) => {
 // Remove product from favorites
 exports.removeFromFavorites = asyncWrapper(async (req, res) => {
     
+    const _id = req.query;
 
-    await Favorite.deleteOne({ _id: req.params.productId });
+    await Favorite.deleteOne({ _id });
 
     res.status(200).json({
         status: httpStatusText.SUCCESS,

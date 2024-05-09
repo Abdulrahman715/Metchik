@@ -56,6 +56,14 @@ const userSchema = new mongoose.Schema({
     imageUrl: {
         type: String,
         default: "https://res.cloudinary.com/duwfy7ale/image/upload/v1714772509/gbktjsj2ynk4j1xxtk8x.jpg"
+    },
+    gender: {
+        type: String,
+        default:"male"
+    },
+    age: {
+        type: String,
+        default: "20",
     }
 });
 
