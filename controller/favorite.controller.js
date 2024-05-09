@@ -7,7 +7,7 @@ const httpStatusText = require('../utils/httpStatusText');
 // Add product to favorites
 exports.addToFavorites = asyncWrapper(async (req, res, next) => {
 
-    const { userId, productId } = req.body;
+    const { userId, productId } = req.query;
 
 
     // Check if the product is already in favorites
