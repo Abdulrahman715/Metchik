@@ -61,13 +61,14 @@ exports.getFavorites = asyncWrapper(async (req, res) => {
 
     const { userId } = req.query;
 
-    const favorites = await Favorite.find({ userId }).populate("productId");
+    const favorites = await Favorite.find({ userId }).select('userId productId');
 
     res.status(200).json({
         status: httpStatusText.SUCCESS,
         data: {
-            userFavorites : favorites
+            userFavorites: favorites
         }
     });
 
 });
+
