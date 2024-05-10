@@ -10,7 +10,7 @@ const getAllProducts = asyncWrapper(
     async (req, res) => {
     
     const query = req.query;
-    const limit = query.limit || 10;
+    const limit = query.limit || 100;
     const page = query.page || 1;
     const skip = (page - 1) * limit;
 
