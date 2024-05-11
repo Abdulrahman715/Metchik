@@ -9,6 +9,10 @@ router.route('/')
     .get(subCategoriesController.getAllSubCategories)
     .post(upload.single('avatar'), subCategoriesController.createSubCategory);
 
+router.route('/data')
+    .get(subCategoriesController.getSpecificSubcategory);
+
+
 router.route('/:SubCategoryId')
     .get(subCategoriesController.getSingleSubCategory)
     .patch(subCategoriesController.updateSubCategory)

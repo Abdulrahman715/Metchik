@@ -9,21 +9,42 @@ const appError = require('../utils/appError');
 const getAllSubCategories = asyncWrapper(
     async (req, res) => {
     
-    const query = req.query;
-    const limit = query.limit || 100;
-    const page = query.page || 1;
-    const skip = (page - 1) * limit;
+        const query = req.query;
+        const limit = query.limit || 100;
+        const page = query.page || 1;
+        const skip = (page - 1) * limit;
 
-    const subCategories = await SubCategory.find({}, { "__v": false }).limit(limit).skip(skip);
-    res.status(200).json({
-        status: httpStatusText.SUCCESS,
-        data: {
-            subCategories
-        }
+        const subCategories = await SubCategory.find({}, { "__v": false }).limit(limit).skip(skip);
+        res.status(200).json({
+            status: httpStatusText.SUCCESS,
+            data: {
+                subCategories
+            }
+        });
     });
-}
 
-)
+
+const getSpecificSubcategory = asyncWrapper(
+    async (req, res) => {
+    
+        const query = req.query;
+        const category = query.category ;
+        const title = query.title; 
+
+        const subCategories = await SubCategory.find(
+            { category, title },
+            { __v: false }
+        );
+
+
+        res.status(200).json({
+            status: httpStatusText.SUCCESS,
+            data: {
+                subCategories
+            }
+        });
+    });
+    
 const getSingleSubCategory = asyncWrapper(async(req, res,next) => {
     
     const subCategory = await SubCategory.findById(req.params.SubCategoryId);
@@ -100,6 +121,7 @@ const deleteSubCategory = asyncWrapper(async(req, res) => {
 
 module.exports = {
     getAllSubCategories,
+    getSpecificSubcategory,
     getSingleSubCategory,
     createSubCategory,
     updateSubCategory,
