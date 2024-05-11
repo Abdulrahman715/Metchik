@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const User = require('../models/user.model');
 
 const { validationResult } = require("express-validator");
@@ -9,48 +11,39 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const generateJWT = require('../utils/generateJWT');
 
-const getAllUsers = asyncWrapper(
-    async (req, res,next) => {
-    
-        const query = req.query;
-        const limit = query.limit || 10;
-        const page = query.page || 1;
-        const skip = (page - 1) * limit;
+const getAllUsers = asyncWrapper(async (req, res, next) => {
+    const query = req.query;
+    const limit = query.limit || 10;
+    const page = query.page || 1;
+    const skip = (page - 1) * limit;
 
-        const users = await User.find({}, { "__v": false }).limit(limit).skip(skip);
-        res.status(200).json({
-            status: httpStatusText.SUCCESS,
-            data: {
-                users
-            }
-        });
+    const users = await User.find({}, { "__v": false}).limit(limit).skip(skip);
+    res.status(200).json({
+        status: httpStatusText.SUCCESS,
+        data: { users }
+    });
 });
 
-
-const getSingleUser = asyncWrapper(async(req, res,next) => {
-    
+const getSingleUser = asyncWrapper(async (req, res, next) => {
     const user = await User.findById(req.params.userId);
 
     if (!user) {
-        const error = appError.create("this User not found", 404, httpStatusText.FAIL);
+        const error = appError.create("User not found", 404, httpStatusText.FAIL);
         return next(error);
     }
 
     res.status(200).json({
         status: httpStatusText.SUCCESS,
-        data: {
-            user
-        }
+        data: { user }
     });
 });
 
-const register = asyncWrapper(async(req, res,next) => {
-    
+const register = asyncWrapper(async (req, res, next) => {
     const { userName, email, password, role, imageUrl } = req.body;
 
-    const oldUser = await User.findOne({ userName: userName, email: email });
+    const oldUser = await User.findOne({ userName, email });
     if (oldUser) {
-        const error = appError.create("this User is already exist", 400, httpStatusText.FAIL);
+        const error = appError.create("User already exists", 400, httpStatusText.FAIL);
         return next(error);
     }
 
@@ -67,78 +60,79 @@ const register = asyncWrapper(async(req, res,next) => {
         imageUrl
     });
 
-    //generate jwt 
+    // Generate JWT
     const token = await generateJWT({ email: newUser.email, id: newUser._id, role: newUser.role });
-    newUser.token = token;
+
+    // Set JWT in cookie
+    res.cookie("jwt", token, {
+        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production"
+    });
 
     await newUser.save();
 
     res.status(201).json({
         status: httpStatusText.SUCCESS,
-        data: {
-            newUser
-        }
+        data: { newUser }
     });
 });
 
-const login = asyncWrapper(async (req, res,next) => {
+const login = asyncWrapper(async (req, res, next) => {
     const { email, password } = req.body;
 
-    if (!email && !password) {
-        const error = appError.create("please enter your data", 400, httpStatusText.FAIL);
+    if (!email || !password) {
+        const error = appError.create("Please enter your email and password", 400, httpStatusText.FAIL);
         return next(error);
     }
 
-    const user = await User.findOne({ email: email });
-    
+    const user = await User.findOne({ email });
 
-    const matchedPassword = await bcrypt.compare(password, user.password);
-
-    if (user && matchedPassword) {
-
-        //generate jwt 
-        const token = await generateJWT({ email: user.email, id: user._id, role: user.role });
-        user.token = token;
-
-        res.status(200).json({
-            status: httpStatusText.SUCCESS,
-            message: "login is successfully",
-            data: {
-                user
-            }
-        });
-    } else {
-        const error = appError.create("data wrong", 404, httpStatusText.FAIL);
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+        const error = appError.create("Incorrect email or password", 401, httpStatusText.FAIL);
         return next(error);
     }
 
-})
+    // Generate JWT
+    const token = await generateJWT({ email: user.email, id: user._id, role: user.role });
 
-const updateUser = asyncWrapper(async(req, res) => {
+    // Set JWT in cookie
+    res.cookie("jwt", token, {
+        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production"
+    });
+
+    res.status(200).json({
+        status: httpStatusText.SUCCESS,
+        message: "Login successful",
+        data: { user }
+    });
+});
+
+const updateUser = asyncWrapper(async (req, res, next) => {
     const userId = req.params.userId;
 
-    let updatedUser = await User.findByIdAndUpdate(userId, { $set: { ...req.body } });
+    const updatedUser = await User.findByIdAndUpdate(userId, { $set: req.body }, { new: true });
 
     if (!updatedUser) {
-        const error = appError.create("this User not found to update", 404, httpStatusText.FAIL);
+        const error = appError.create("User not found to update", 404, httpStatusText.FAIL);
         return next(error);
     }
 
     res.status(200).json({
         status: httpStatusText.SUCCESS,
-        data: {
-            updatedUser
-        }
+        data: { updatedUser }
     });
 });
 
-const deleteUser = asyncWrapper(async(req, res) => {
+const deleteUser = asyncWrapper(async (req, res, next) => {
     await User.deleteOne({ _id: req.params.userId });
 
     res.status(200).json({
         status: httpStatusText.SUCCESS,
         data: null,
-        message: "User is deleted successfully"
+        message: "User deleted successfully"
     });
 });
 
@@ -149,4 +143,4 @@ module.exports = {
     login,
     updateUser,
     deleteUser
-}
+};
