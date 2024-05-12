@@ -8,7 +8,9 @@ const upload = require('../middleware/multerConfig');
 
 router.route('/')
     .get(userController.getAllUsers)
-    .post(upload.single('avatar'), userController.register)
+    
+router.route('/register')
+    .post(upload.single('avatar'), userController.register);
 
 router.route('/login')
     .post(userController.login);
