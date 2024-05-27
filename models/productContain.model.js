@@ -21,7 +21,7 @@ const ProductSchema = new mongoose.Schema({
     description: String,
     machineImage: {
         type: String,
-        default:"uploads/profile.png"
+        default:"https://res.cloudinary.com/duwfy7ale/image/upload/v1716826090/nwiyhwgwpa7wmylucazy.png"
     }
 });
 
