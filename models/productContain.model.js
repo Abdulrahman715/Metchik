@@ -19,6 +19,10 @@ const ProductSchema = new mongoose.Schema({
     review: Number,
     productAttribute: [ProductAttributeSchema], // Embedded schema
     description: String,
+    machineImage: {
+        type: String,
+        default:"uploads/profile.png"
+    }
 });
 
 // Create a model
